@@ -446,8 +446,8 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));		
-			Attack ( false, 3, spread, 0, 9999.0f );
-			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );	
+			Attack ( false, 10, 10, 0, 9999.0f );		//Change spread to 4, damage output, and bullets
+			 ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );	
 			return SRESULT_STAGE ( STAGE_WAIT );
 	
 		case STAGE_WAIT:			
@@ -455,8 +455,8 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 				SetState ( "Fire", 0 );
 				return SRESULT_DONE;
 			}
-			if ( gameLocal.time > nextAttackTime && AnimDone ( ANIMCHANNEL_LEGS, 4 ) ) {
-				SetState ( "Idle", 4 );
+			if ( gameLocal.time > nextAttackTime && AnimDone ( ANIMCHANNEL_LEGS, 0 ) ) {	//Change 4 to 0
+				SetState ( "Idle", 0 );		//change 4 to 0
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
