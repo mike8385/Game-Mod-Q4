@@ -109,6 +109,7 @@ protected:
 	int						ieMinPitch;
 	int						ieMaxPitch;
 	float					ieSlicePercentage;
+	bool					explodeAgain;
 
 // RAVEN BEGIN
 // ddynerman: hit count for stats

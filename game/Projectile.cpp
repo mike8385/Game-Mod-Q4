@@ -77,6 +77,7 @@ idProjectile::idProjectile( void ) {
 	launchOrig			= vec3_origin;
 	launchDir			= vec3_origin;
 	launchSpeed			= 0.0f;
+	explodeAgain = false;
 }
 
 /*
@@ -494,6 +495,14 @@ void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 
 	flyEffectAttenuateSpeed = spawnArgs.GetFloat( "flyEffectAttenuateSpeed", "0" );
 
 	state = LAUNCHED;
+
+	if (explodeAgain == false) {
+		explodeAgain = true;
+		Launch(start, dir, pushVelocity, timeSinceFire, dmgPower);
+	}
+	else {
+		//explodeAgain = false;
+	}
 
 	hitCount = 0;
 
@@ -1010,6 +1019,10 @@ void idProjectile::SpawnImpactEntities(const trace_t& collision, const idVec3 ve
 }
 
 /*
+Try making a new function
+*/
+
+/*
 =================
 idProjectile::DefaultDamageEffect
 =================
@@ -1092,7 +1105,7 @@ void idProjectile::Fizzle( void ) {
 	if( flyEffect)	{
 		//flyEffect->Event_Remove();
 	}
-
+	
 	Hide();
 	FreeLightDef();
 
@@ -1184,6 +1197,8 @@ void idProjectile::Explode( const trace_t *collision, const bool showExplodeFX, 
 	fl.takedamage = false;
 	physicsObj.SetContents( 0 );
 	physicsObj.PutToRest();
+	
+
 
 	state = EXPLODED;
 
@@ -1787,7 +1802,7 @@ void idGuidedProjectile::Launch( const idVec3 &start, const idVec3 &dir, const i
 
 /*
 =================
-idGuidedProjectile::Launch
+idGuidedProjectile::Killed
 =================
 */
 void idGuidedProjectile::Killed( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location ) {
