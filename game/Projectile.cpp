@@ -77,7 +77,6 @@ idProjectile::idProjectile( void ) {
 	launchOrig			= vec3_origin;
 	launchDir			= vec3_origin;
 	launchSpeed			= 0.0f;
-	explodeAgain = false;
 }
 
 /*
@@ -495,14 +494,6 @@ void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 
 	flyEffectAttenuateSpeed = spawnArgs.GetFloat( "flyEffectAttenuateSpeed", "0" );
 
 	state = LAUNCHED;
-
-	if (explodeAgain == false) {
-		explodeAgain = true;
-		Launch(start, dir, pushVelocity, timeSinceFire, dmgPower);
-	}
-	else {
-		//explodeAgain = false;
-	}
 
 	hitCount = 0;
 

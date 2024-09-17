@@ -192,7 +192,7 @@ typedef enum {
 
 const int	ASYNC_PLAYER_TOURNEY_STATUS_BITS = idMath::BitsForInteger( PTS_NUM_STATES );
 
-class idInventory {
+class idInventory {			//What keeps track of players inventory
 public:
 	int						maxHealth;
 	int						weapons;
@@ -330,7 +330,7 @@ public:
 	} pfl;
 		
 	// inventory
-	idInventory				inventory;
+	idInventory				inventory;		//Inventory
 
 	rvWeapon*						weapon;
 	idEntityPtr<rvViewWeapon>		weaponViewModel;
