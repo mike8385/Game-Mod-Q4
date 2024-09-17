@@ -55,6 +55,7 @@ private:
 	stateResult_t		State_Fire				( const stateParms_t& parms );
 	stateResult_t		State_Raise				( const stateParms_t& parms );
 	stateResult_t		State_Lower				( const stateParms_t& parms );
+	stateResult_t		State_Charged			(const stateParms_t& parms);
 	
 	stateResult_t		State_Rocket_Idle		( const stateParms_t& parms );
 	stateResult_t		State_Rocket_Reload		( const stateParms_t& parms );
@@ -582,4 +583,35 @@ rvWeaponRocketLauncher::Frame_AddToClip
 stateResult_t rvWeaponRocketLauncher::Frame_AddToClip ( const stateParms_t& parms ) {
 	AddToClip ( 1 );
 	return SRESULT_OK;
+}
+
+
+/*
+================
+rvWeaponBlaster::State_Charged
+================
+*/
+stateResult_t rvWeaponRocketLauncher::State_Charged(const stateParms_t& parms) {
+	enum {
+		CHARGED_INIT,
+		CHARGED_WAIT,
+	};
+	switch (parms.stage) {
+	case CHARGED_INIT:
+		viewModel->SetShaderParm(BLASTER_SPARM_CHARGEGLOW, 1.0f);
+
+		StopSound(SND_CHANNEL_ITEM, false);
+		StartSound("snd_charge_loop", SND_CHANNEL_ITEM, 0, false, NULL);
+		StartSound("snd_charge_click", SND_CHANNEL_BODY, 0, false, NULL);
+		return SRESULT_STAGE(CHARGED_WAIT);
+
+	case CHARGED_WAIT:
+		if (!wsfl.attack) {
+			fireForced = true;
+			SetState("Fire", 0);
+			return SRESULT_DONE;
+		}
+		return SRESULT_WAIT;
+	}
+	return SRESULT_ERROR;
 }
