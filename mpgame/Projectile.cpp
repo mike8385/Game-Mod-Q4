@@ -1296,7 +1296,7 @@ void idProjectile::Explode( const trace_t *collision, const bool showExplodeFX, 
 		if ( removeTime < delay * 1000 ) {
 			removeTime = ( delay + 0.10 ) * 1000;
 		}
-		PostEventSec( &EV_RadiusDamage, delay, ignore );//
+		PostEventSec( &EV_RadiusDamage, delay, ignore );
 	} else {
 		Event_RadiusDamage( ignore );
 	}

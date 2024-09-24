@@ -617,59 +617,22 @@ stateResult_t rvWeaponRocketLauncher::State_Fire(const stateParms_t& parms) {
 		STAGE_WAIT,
 	};
 	switch (parms.stage) {
-	case STAGE_INIT:
-
-		StopSound(SND_CHANNEL_ITEM, false);
-		//viewModel->SetShaderParm(BLASTER_SPARM_CHARGEGLOW, 0);
-		//don't fire if we're targeting a gui.
-		idPlayer* player;
-		player = gameLocal.GetLocalPlayer();
-
-		//make sure the player isn't looking at a gui first
-		if (player && player->GuiActive()) {
-			fireHeldTime = 0;
-			common->Printf("In fire set lower\n");
-			SetState("Lower", 0);
-			return SRESULT_DONE;
-		}
-
-		if (player && !player->CanFire()) {
-			fireHeldTime = 0;
-			common->Printf("In fire set idle\n");
-			SetState("Idle", 4);
-			return SRESULT_DONE;
-		}
-
-		if (gameLocal.time - fireHeldTime > chargeTime) {
-			common->Printf("Charge fireRL\n");
-			Attack(true, 100, 100, 0, 999.0f);
-			PlayEffect("fx_chargedflash", barrelJointView, false);
-			PlayAnim(ANIMCHANNEL_LEGS, "chargedfire", parms.blendFrames);
-		}
-		else {
-			common->Printf("FireRL\n");
-			Attack(false, 1, spread, 0, 100.0f);	//Change damage, spread,
-			PlayEffect("fx_normalflash", barrelJointView, false);
-			PlayAnim(ANIMCHANNEL_LEGS, "fire", parms.blendFrames);
-		}
-		fireHeldTime = 0;
-		//nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
-		//Attack(false, 10, 40, 0, 999.0f);		//Change spread to 10, damage output, and bullets
-		//PlayAnim(ANIMCHANNEL_LEGS, "fire", parms.blendFrames);
-
-		return SRESULT_STAGE(STAGE_WAIT);
-
-
-	case STAGE_WAIT:
-		if (wsfl.attack && gameLocal.time >= nextAttackTime && (gameLocal.isClient || AmmoInClip()) && !wsfl.lowerWeapon) {
-			SetState("Fire", 0);
-			return SRESULT_DONE;
-		}
-		if (gameLocal.time > nextAttackTime && AnimDone(ANIMCHANNEL_LEGS, 4)) {	//Change 4 to 0
-			SetState("Idle", 4);		//change 4 to 0
-			return SRESULT_DONE;
-		}
-		return SRESULT_WAIT;
+		case STAGE_INIT:
+			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));		
+			Attack ( false, 3, spread, 0, 9999.0f );
+			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );	
+			return SRESULT_STAGE ( STAGE_WAIT );
+	
+		case STAGE_WAIT:			
+			if ( wsfl.attack && gameLocal.time >= nextAttackTime && ( gameLocal.isClient || AmmoInClip ( ) ) && !wsfl.lowerWeapon ) {
+				SetState ( "Fire", 0 );
+				return SRESULT_DONE;
+			}
+			if ( gameLocal.time > nextAttackTime && AnimDone ( ANIMCHANNEL_LEGS, 4 ) ) {
+				SetState ( "Idle", 4 );
+				return SRESULT_DONE;
+			}
+			return SRESULT_WAIT;
 	}
 	return SRESULT_ERROR;
 }

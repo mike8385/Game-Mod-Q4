@@ -1145,7 +1145,7 @@ idProjectile::Event_RadiusDamage
 void idProjectile::Event_RadiusDamage( idEntity *ignore ) {
 	const char *splash_damage = spawnArgs.GetString( "def_splash_damage" );
 	if ( splash_damage[0] != '\0' ) {
-		gameLocal.RadiusDamage( physicsObj.GetOrigin(), this, owner, ignore, this, splash_damage, 0, &hitCount );	//Set splash_damage and damagePower to 0
+		gameLocal.RadiusDamage( physicsObj.GetOrigin(), this, owner, ignore, this, splash_damage, damagePower, &hitCount );
 	}
 }
 
@@ -1243,7 +1243,7 @@ void idProjectile::Explode( const trace_t *collision, const bool showExplodeFX, 
 		if ( removeTime < delay * 1000 ) {
 			removeTime = ( delay + 0.10 ) * 1000;
 		}
-		PostEventSec( &EV_RadiusDamage, delay, ignore );	
+		PostEventSec( &EV_RadiusDamage, delay, ignore );
 	} else {
 		Event_RadiusDamage( ignore );
 	}
