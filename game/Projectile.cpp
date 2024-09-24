@@ -509,6 +509,9 @@ void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 
 	if ( g_perfTest_noProjectiles.GetBool() ) {
 		PostEventMS( &EV_Remove, 0 );
 	}
+
+	SpawnImpactEntitiesTwo(launchOrig, velocity, launchDir);
+
 }
 
 /*
@@ -525,7 +528,8 @@ void idProjectile::Think( void ) {
 			idVec3 vel;
 			vel = physicsObj.GetLinearVelocity ( );
 			vel.Normalize ( );
-			physicsObj.SetLinearVelocity ( speed.GetCurrentValue ( gameLocal.time ) * vel );			
+			physicsObj.SetLinearVelocity ( speed.GetCurrentValue ( gameLocal.time ) * vel );	
+
 			if ( speed.IsDone ( gameLocal.time ) ) {
 				updateVelocity = false;
 			}
@@ -560,10 +564,11 @@ void idProjectile::Think( void ) {
 		}
 
 		UpdateVisualAngles();
+		//SpawnImpactEntitiesTwo();
 	}
 		
 	Present();
-
+	SpawnImpactEntitiesTwo(physicsObj.GetOrigin(), physicsObj.GetLinearVelocity(), physicsObj.GetPushedLinearVelocity());
 	// add the light
  	if ( renderLight.lightRadius.x > 0.0f && g_projectileLights.GetBool() ) {
 		renderLight.origin = GetPhysics()->GetOrigin() + GetPhysics()->GetAxis() * lightOffset;
@@ -761,7 +766,6 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
  
 	//Spawn any impact entities if necessary.
 	SpawnImpactEntities(collision, velocity);
-
 	//Apply any impact force if the necessary
 	//ApplyImpactForce(ent, collision, dir);
  
@@ -1005,6 +1009,8 @@ void idProjectile::SpawnImpactEntities(const trace_t& collision, const idVec3 ve
 			//Now orient the direction to the surface world orientation.
 			direction = impactAxes * tempDirection;
 			spawnProjectile->Launch(origin, direction, reflectionVelocity);
+
+			SpawnImpactEntitiesTwo(origin, velocity, direction);
 		}
 	}
 }
@@ -1012,6 +1018,31 @@ void idProjectile::SpawnImpactEntities(const trace_t& collision, const idVec3 ve
 /*
 Try making a new function
 */
+void idProjectile::SpawnImpactEntitiesTwo(const idVec3& origin, const idVec3 velocity, idVec3 direction)
+{
+	if (impactEntity.Length() == 0 || numImpactEntities == 0)
+		return;
+
+	const idDict* impactEntityDict = gameLocal.FindEntityDefDict(impactEntity);
+	if (impactEntityDict == NULL)
+		return;
+
+	//for (int i = 0; i < numImpactEntities; i++)
+	//{
+		idProjectile* spawnProjectile = NULL;
+		gameLocal.SpawnEntityDef(*impactEntityDict, (idEntity**)&spawnProjectile);
+		if (spawnProjectile != NULL)
+		{
+
+			spawnProjectile->SetOwner(owner);
+
+			//Now orient the direction to the surface world orientation.
+			spawnProjectile->Launch(origin, direction, velocity);
+
+			//SpawnEntitiesTwo(direction, velocity, origin);
+		}
+	//}
+}
 
 /*
 =================
@@ -2128,3 +2159,5 @@ void rvMIRVProjectile::Event_LaunchWarheads( void ) {
 
 }
 // RAVEN END
+
+

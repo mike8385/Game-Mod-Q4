@@ -105,6 +105,7 @@ bool rvWeaponBlaster::UpdateAttack ( void ) {
 	// then start the shooting process.
 	if ( wsfl.attack && gameLocal.time >= nextAttackTime ) {
 		// Save the time which the fire button was pressed
+		common->Printf("Testing\n");
 		if ( fireHeldTime == 0 ) {		
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 			fireHeldTime   = gameLocal.time;
@@ -116,6 +117,7 @@ bool rvWeaponBlaster::UpdateAttack ( void ) {
 	// delay then transition to the charge state.
 	if ( fireHeldTime != 0 ) {
 		if ( gameLocal.time - fireHeldTime > chargeDelay ) {
+			common->Printf("Change state to charge\n");
 			SetState ( "Charge", 4 );
 			return true;
 		}
@@ -317,6 +319,7 @@ stateResult_t rvWeaponBlaster::State_Idle ( const stateParms_t& parms ) {
 				return SRESULT_DONE;
 			}
 			if ( UpdateAttack ( ) ) {
+				common->Printf("Update attack\n");
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
@@ -350,12 +353,14 @@ stateResult_t rvWeaponBlaster::State_Charge ( const stateParms_t& parms ) {
 				viewModel->SetShaderParm ( BLASTER_SPARM_CHARGEGLOW, f );
 				
 				if ( !wsfl.attack ) {
+					common->Printf("Set fire in CHARGE\n");
 					SetState ( "Fire", 0 );
 					return SRESULT_DONE;
 				}
 				
 				return SRESULT_WAIT;
 			} 
+			common->Printf("Set charged in CHARGE\n");
 			SetState ( "Charged", 4 );
 			return SRESULT_DONE;
 	}
@@ -383,6 +388,7 @@ stateResult_t rvWeaponBlaster::State_Charged ( const stateParms_t& parms ) {
 			
 		case CHARGED_WAIT:
 			if ( !wsfl.attack ) {
+				common->Printf("Set Fire in Charged\n");
 				fireForced = true;
 				SetState ( "Fire", 0 );
 				return SRESULT_DONE;
@@ -414,12 +420,14 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 			//make sure the player isn't looking at a gui first
 			if( player && player->GuiActive() )	{
 				fireHeldTime = 0;
+				common->Printf("In fire set lower\n");
 				SetState ( "Lower", 0 );
 				return SRESULT_DONE;
 			}
 
 			if( player && !player->CanFire() )	{
 				fireHeldTime = 0;
+				common->Printf("In fire set idle\n");
 				SetState ( "Idle", 4 );
 				return SRESULT_DONE;
 			}
@@ -427,10 +435,12 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 
 	
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
+				common->Printf("Charge FireB\n");
 				Attack ( true, 10, spread, 0, 1.0f );
 				PlayEffect ( "fx_chargedflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
 			} else {
+				common->Printf("FireB\n");
 				Attack ( false, 50, 50, 0, 20.0f );	//Change damage, spread,
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
