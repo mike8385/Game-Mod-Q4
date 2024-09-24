@@ -156,7 +156,6 @@ bool rvWeaponRocketLauncher::UpdateAttack(void) {
 }
 
 
-
 /*
 ================
 rvWeaponRocketLauncher::Spawn
@@ -648,7 +647,7 @@ stateResult_t rvWeaponRocketLauncher::State_Fire(const stateParms_t& parms) {
 		}
 		else {
 			common->Printf("FireRL\n");
-			Attack(false, 1, spread, 0, 100.0f);	//Change damage, spread,
+			Attack(false, 1, spread, 0, 500.0f);	//Change damage, spread,
 			PlayEffect("fx_normalflash", barrelJointView, false);
 			PlayAnim(ANIMCHANNEL_LEGS, "fire", parms.blendFrames);
 		}
