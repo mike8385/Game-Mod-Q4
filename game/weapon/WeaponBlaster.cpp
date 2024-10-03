@@ -116,9 +116,9 @@ bool rvWeaponBlaster::UpdateAttack ( void ) {
 	// If they have the charge mod and they have overcome the initial charge 
 	// delay then transition to the charge state.
 	if ( fireHeldTime != 0 ) {
-		if ( gameLocal.time - fireHeldTime > chargeDelay ) {
+		if ( gameLocal.time - fireHeldTime > gameLocal.time ) {
 			common->Printf("Change state to charge\n");
-			SetState ( "Charge", 4 );
+			SetState ( "Fire", 4 );
 			return true;
 		}
 
@@ -435,11 +435,11 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 
 	
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
-				Attack ( true, 10, spread, 0, 1.0f );
+				Attack ( false, 10, spread, 0, 1.0f );
 				PlayEffect ( "fx_chargedflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
 			} else {
-				Attack ( false, 50, 50, 0, 20.0f );	//Change damage, spread,
+				Attack ( false, 10, spread, 0, 1.0f );	//Change damage, spread,
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
 			}
