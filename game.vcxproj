@@ -373,6 +373,7 @@
     <ClCompile Include="game\weapon\WeaponRailgun.cpp" />
     <ClCompile Include="game\weapon\WeaponRocketLauncher.cpp" />
     <ClCompile Include="game\weapon\WeaponShotgun.cpp" />
+    <ClCompile Include="game\weapon\WeaponSniper.cpp" />
     <ClCompile Include="game\WorldSpawn.cpp" />
   </ItemGroup>
   <ItemGroup>

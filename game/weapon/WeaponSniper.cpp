@@ -4,12 +4,12 @@
 #include "../Game_local.h"
 #include "../Weapon.h"
 
-class rvWeaponMachinegun : public rvWeapon {
+class rvWeaponSniper : public rvWeapon {
 public:
 
-	CLASS_PROTOTYPE( rvWeaponMachinegun );
+	CLASS_PROTOTYPE( rvWeaponSniper );
 
-	rvWeaponMachinegun ( void );
+	rvWeaponSniper ( void );
 
 	virtual void		Spawn				( void );
 	virtual void		Think				( void );
@@ -33,26 +33,26 @@ private:
 	stateResult_t		State_Reload		( const stateParms_t& parms );
 	stateResult_t		State_Flashlight	( const stateParms_t& parms );
 
-	CLASS_STATES_PROTOTYPE ( rvWeaponMachinegun );
+	CLASS_STATES_PROTOTYPE ( rvWeaponSniper );
 };
 
-CLASS_DECLARATION( rvWeapon, rvWeaponMachinegun )
+CLASS_DECLARATION( rvWeapon, rvWeaponSniper)
 END_CLASS
 
 /*
 ================
-rvWeaponMachinegun::rvWeaponMachinegun
+rvWeaponSniper::rvWeaponSniper
 ================
 */
-rvWeaponMachinegun::rvWeaponMachinegun ( void ) {
+rvWeaponSniper::rvWeaponSniper ( void ) {
 }
 
 /*
 ================
-rvWeaponMachinegun::Spawn
+rvWeaponSniper::Spawn
 ================
 */
-void rvWeaponMachinegun::Spawn ( void ) {
+void rvWeaponSniper::Spawn ( void ) {
 	spreadZoom = spawnArgs.GetFloat ( "spreadZoom" );
 	fireHeld   = false;
 		
@@ -63,47 +63,47 @@ void rvWeaponMachinegun::Spawn ( void ) {
 
 /*
 ================
-rvWeaponMachinegun::Save
+rvWeaponSniper::Save
 ================
 */
-void rvWeaponMachinegun::Save ( idSaveGame *savefile ) const {
+void rvWeaponSniper::Save ( idSaveGame *savefile ) const {
 	savefile->WriteFloat ( spreadZoom );
 	savefile->WriteBool ( fireHeld );
 }
 
 /*
 ================
-rvWeaponMachinegun::Restore
+rvWeaponSniper::Restore
 ================
 */
-void rvWeaponMachinegun::Restore ( idRestoreGame *savefile ) {
+void rvWeaponSniper::Restore ( idRestoreGame *savefile ) {
 	savefile->ReadFloat ( spreadZoom );
 	savefile->ReadBool ( fireHeld );
 }
 
 /*
 ================
-rvWeaponMachinegun::PreSave
+rvWeaponSniper::PreSave
 ================
 */
-void rvWeaponMachinegun::PreSave ( void ) {
+void rvWeaponSniper::PreSave ( void ) {
 }
 
 /*
 ================
-rvWeaponMachinegun::PostSave
+rvWeaponSniper::PostSave
 ================
 */
-void rvWeaponMachinegun::PostSave ( void ) {
+void rvWeaponSniper::PostSave ( void ) {
 }
 
 
 /*
 ================
-rvWeaponMachinegun::Think
+rvWeaponSniper::Think
 ================
 */
-void rvWeaponMachinegun::Think()
+void rvWeaponSniper::Think()
 {
 	rvWeapon::Think();
 	if ( zoomGui && owner == gameLocal.GetLocalPlayer( ) ) {
@@ -113,10 +113,10 @@ void rvWeaponMachinegun::Think()
 
 /*
 ================
-rvWeaponMachinegun::UpdateFlashlight
+rvWeaponSniper::UpdateFlashlight
 ================
 */
-bool rvWeaponMachinegun::UpdateFlashlight ( void ) {
+bool rvWeaponSniper::UpdateFlashlight ( void ) {
 	if ( !wsfl.flashlight ) {
 		return false;
 	}
@@ -127,10 +127,10 @@ bool rvWeaponMachinegun::UpdateFlashlight ( void ) {
 
 /*
 ================
-rvWeaponMachinegun::Flashlight
+rvWeaponSniper::Flashlight
 ================
 */
-void rvWeaponMachinegun::Flashlight ( bool on ) {
+void rvWeaponSniper::Flashlight ( bool on ) {
 	owner->Flashlight ( on );
 	
 	if ( on ) {
@@ -150,19 +150,19 @@ void rvWeaponMachinegun::Flashlight ( bool on ) {
 ===============================================================================
 */
 
-CLASS_STATES_DECLARATION ( rvWeaponMachinegun )
-	STATE ( "Idle",				rvWeaponMachinegun::State_Idle)
-	STATE ( "Fire",				rvWeaponMachinegun::State_Fire )
-	STATE ( "Reload",			rvWeaponMachinegun::State_Reload )
-	STATE ( "Flashlight",		rvWeaponMachinegun::State_Flashlight )
+CLASS_STATES_DECLARATION ( rvWeaponSniper )
+	STATE ( "Idle",				rvWeaponSniper::State_Idle)
+	STATE ( "Fire",				rvWeaponSniper::State_Fire )
+	STATE ( "Reload",			rvWeaponSniper::State_Reload )
+	STATE ( "Flashlight",		rvWeaponSniper::State_Flashlight )
 END_CLASS_STATES
 
 /*
 ================
-rvWeaponMachinegun::State_Idle
+rvWeaponSniper::State_Idle
 ================
 */
-stateResult_t rvWeaponMachinegun::State_Idle( const stateParms_t& parms ) {
+stateResult_t rvWeaponSniper::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -216,10 +216,10 @@ stateResult_t rvWeaponMachinegun::State_Idle( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponMachinegun::State_Fire
+rvWeaponSniper::State_Fire
 ================
 */
-stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
+stateResult_t rvWeaponSniper::State_Fire ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -256,10 +256,10 @@ stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponMachinegun::State_Reload
+rvWeaponSniper::State_Reload
 ================
 */
-stateResult_t rvWeaponMachinegun::State_Reload ( const stateParms_t& parms ) {
+stateResult_t rvWeaponSniper::State_Reload ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -294,10 +294,10 @@ stateResult_t rvWeaponMachinegun::State_Reload ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponMachinegun::State_Flashlight
+rvWeaponSniper::State_Flashlight
 ================
 */
-stateResult_t rvWeaponMachinegun::State_Flashlight ( const stateParms_t& parms ) {
+stateResult_t rvWeaponSniper::State_Flashlight ( const stateParms_t& parms ) {
 	enum {
 		FLASHLIGHT_INIT,
 		FLASHLIGHT_WAIT,

@@ -76,7 +76,9 @@ void idModelExport::Shutdown( void ) {
 =====================
 idModelExport::CheckMayaInstall
 
-Determines if Maya is installed on the user's machine
+Determines if Maya is installed on the user's 
+
+
 =====================
 */
 bool idModelExport::CheckMayaInstall( void ) {

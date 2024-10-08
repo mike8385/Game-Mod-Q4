@@ -455,7 +455,8 @@ void rvGameState::NewState( mpGameState_t newState ) {
 			{
 				gameLocal.mpGame.isBuyingAllowedRightNow = true;
 
-				// Give all the clients full ammo since this is the start of the round.
+				// 
+				// the clients full ammo since this is the start of the round.
 				for( int i = 0; i < gameLocal.numClients; i++ ) {
 					idPlayer* p = (idPlayer*)gameLocal.entities[ i ];
 					if( p == NULL || !p->IsType( idPlayer::GetClassType() ) )
