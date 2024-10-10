@@ -519,6 +519,7 @@ idAI::Event_BecomeAggressive
 =====================
 */
 void idAI::Event_BecomeAggressive ( void ) {
+	common->Printf("Become Agressive");
 	combat.fl.ignoreEnemies = false;
 	combat.fl.aware = true;
 	ForceTacticalUpdate ( );
@@ -530,6 +531,7 @@ idAI::Event_BecomePassive
 =====================
 */
 void idAI::Event_BecomePassive ( int ignoreEnemies ) {
+	common->Printf("become Passive");
 	combat.fl.ignoreEnemies = (ignoreEnemies != 0);
 	combat.fl.aware = false;
 	SetEnemy ( NULL );

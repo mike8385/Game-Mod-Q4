@@ -124,6 +124,7 @@ idAI::State_WakeUp
 ================
 */
 stateResult_t idAI::State_WakeUp ( const stateParms_t& parms ) {
+	common->Printf("Wakeup\n");
 	const char* triggerAnim;
 	
 	WakeUp ( );
@@ -148,9 +149,9 @@ stateResult_t idAI::State_WakeUp ( const stateParms_t& parms ) {
 			PostState ( "Wait_Activated" );
  		}
 	}
-
+	common->Printf("State_combat in wakeup\n");
 	PostState ( "State_Combat" );
-
+	//HERERERERER3ERERE
 	return SRESULT_DONE;
 }
 
@@ -160,6 +161,7 @@ idAI::State_Passive
 ================
 */
 stateResult_t idAI::State_Passive ( const stateParms_t& parms ) {
+	common->Printf("Set Passive\n");
 	if ( leader && !aifl.scripted ) {
 		if ( !GetEnemy() ) {
 			if ( combat.fl.aware && !combat.fl.ignoreEnemies ) {

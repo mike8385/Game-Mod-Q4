@@ -5603,6 +5603,7 @@ idGameLocal::AlertAI
 ============
 */
 void idGameLocal::AlertAI( idEntity *ent ) {
+	//common->Printf("Alert");
 // RAVEN BEGIN
 // bdube: merged
 	if ( ent ) {

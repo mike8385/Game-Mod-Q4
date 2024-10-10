@@ -536,7 +536,7 @@ void rvAITether::InitNonPersistentSpawnArgs ( void ) {
 	}
 	if ( tfl.becomeAggressive && tfl.becomePassive ) {
 		gameLocal.Warning ( "both becomePassive and becomeAggressive were specified for tether '%s', becomeAggressive will take precedence" );
-		tfl.becomePassive = false;
+		tfl.becomePassive = true;
 	}
 }
 

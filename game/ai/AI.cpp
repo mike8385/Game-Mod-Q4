@@ -1659,6 +1659,7 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 	StopSound( SND_CHANNEL_AMBIENT, false );
 
 	if ( attacker && attacker->IsType( idActor::GetClassType() ) ) {
+
 		gameLocal.AlertAI( ( idActor * )attacker );
 
 		aiManager.AnnounceKill ( this, attacker, inflictor );
@@ -4147,6 +4148,7 @@ idAI::FindEnemy
 ============
 */
 idEntity *idAI::FindEnemy ( bool inFov, bool forceNearest, float maxDistSqr ){
+	//common->Printf("FindEnemy");
 	idActor*	actor;
 	idActor*	bestEnemy;
 	idActor*	bestEnemyBackup;
