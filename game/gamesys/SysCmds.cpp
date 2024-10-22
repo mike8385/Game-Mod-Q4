@@ -2939,6 +2939,222 @@ void Cmd_locate_f(const idCmdArgs& args) {
 	common->Printf("Player is at (%f,%f,%f).\n", position.x,position.y, position.z);
 }
 
+void Cmd_grenadeThrow_f(const idCmdArgs& args) {
+	common->Printf("Tring to throw grenade");
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	idInventory* inventory;
+	idProjectile* proj;
+	const idDict* grenade = gameLocal.FindEntityDefDict("projectile_grenade");
+	idEntityPtr<idEntity> projectileEnt = NULL;
+	idPhysics_Player physicsObj;
+	idMat3 playerViewAxis = player->firstPersonViewAxis;
+	idEntity* ent;
+	idBounds ownerBounds = player->GetPhysics()->GetAbsBounds();
+	idBounds projBounds;
+	idVec3 dir;
+	idDict dict;
+	idVec3 pushval = physicsObj.GetPushedLinearVelocity();
+
+	dict.Init();
+	dict.Copy(*grenade);
+
+	const char* weap = player->spawnArgs.GetString(va("def_weapon4"));
+	common->Printf("\n%s \n",weap);
+
+	if (!player)return;
+	//while (player->)
+	if (player->inventory.HasAmmo(weap) || player->inventory.HasAmmo(player->spawnArgs.GetString(va("ammo_smoke")))) {
+		common->Printf("Inside hasAmmo\n");
+		common->Printf("Check if has grenade");
+		common->Printf("Check if has smoke");
+
+
+
+
+		idVec3 chestPost = player->GetChestPosition();
+			float	 ang;
+			float	 spin;
+			//idVec3	 dir;
+			idBounds projBounds;
+			float spinRadius = DEG2RAD(0);
+			// Calculate a random launch direction based on the spread
+			ang = idMath::Sin(spinRadius * gameLocal.random.RandomFloat());
+			spin = (float)DEG2RAD(360.0f) * gameLocal.random.RandomFloat();
+			//RAVEN BEGIN
+			//asalmon: xbox must use muzzle Axis for aim assistance
+
+			
+			dir = playerViewAxis[0] + playerViewAxis[2] * (ang * idMath::Sin(spin)) - playerViewAxis[1] * (ang * idMath::Cos(spin));
+			//dir += dirOffset;
+
+			//RAVEN END
+			dir.Normalize();
+
+			if (projectileEnt) {
+				common->Printf("Inside projectileEnt IF\n");
+				ent = projectileEnt;
+				ent->Show();
+				ent->Unbind();
+				projectileEnt = NULL;
+			}
+			else {
+				dict.SetInt("instance", player->GetInstance());
+				gameLocal.SpawnEntityDef(dict, &ent, false);
+			}
+			//idDict& dict = 0;
+			if (!ent) {
+				gameLocal.Error("Error");
+			}
+			//Create Projectile
+			assert(ent->IsType(idProjectile::GetClassType()));
+			common->Printf("Before Create Projectile\n");
+			proj = static_cast<idProjectile*>(ent);
+			common->Printf("Before Create Projectile1\n");
+			proj->Create(player, chestPost, dir, NULL, player->extraProjPassEntity);
+			common->Printf("After CP\n");
+
+			projBounds = proj->GetPhysics()->GetBounds().Rotate(proj->GetPhysics()->GetAxis());
+			
+			idVec3  start;
+			float   distance;
+			trace_t	tr;
+
+			if ((ownerBounds - projBounds).RayIntersection(chestPost, playerViewAxis[0], distance)) {
+					start = chestPost + distance * playerViewAxis[0];
+			}
+			else {
+				start = ownerBounds.GetCenter();
+			}
+
+			gameLocal.Translation(player, tr, start, chestPost, proj->GetPhysics()->GetClipModel(), proj->GetPhysics()->GetClipModel()->GetAxis(), MASK_SHOT_RENDERMODEL, player);
+			// RAVEN END
+			chestPost = tr.endpos;
+
+			proj->Launch(chestPost, dir, pushval, 0, 1.0f);
+			player->AddProjectilesFired(1);
+			
+			common->Printf("End");
+			
+	}
+
+}
+
+void Cmd_smokeThrow_f(const idCmdArgs& args) {
+	common->Printf("Tring to throw grenade");
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	idInventory* inventory;
+	idProjectile* proj;
+	const idDict* grenade = gameLocal.FindEntityDefDict("projectile_grenade");
+	idEntityPtr<idEntity> projectileEnt = NULL;
+	idPhysics_Player physicsObj;
+	idMat3 playerViewAxis = player->firstPersonViewAxis;
+	idEntity* ent;
+	idBounds ownerBounds = player->GetPhysics()->GetAbsBounds();
+	idBounds projBounds;
+	idVec3 dir;
+	idDict dict;
+	idVec3 pushval = physicsObj.GetPushedLinearVelocity();
+
+	dict.Init();
+	dict.Copy(*grenade);
+
+	const char* weap = player->spawnArgs.GetString(va("def_weapon4"));
+	common->Printf("\n%s \n", weap);
+
+	if (!player)return;
+	if (player->inventory.HasAmmo(weap)) {
+		common->Printf("Inside hasAmmo\n");
+
+
+
+
+		idVec3 chestPost = player->GetChestPosition();
+		float	 ang;
+		float	 spin;
+		//idVec3	 dir;
+		idBounds projBounds;
+		float spinRadius = DEG2RAD(0);
+		// Calculate a random launch direction based on the spread
+		ang = idMath::Sin(spinRadius * gameLocal.random.RandomFloat());
+		spin = (float)DEG2RAD(360.0f) * gameLocal.random.RandomFloat();
+		//RAVEN BEGIN
+		//asalmon: xbox must use muzzle Axis for aim assistance
+
+
+		dir = playerViewAxis[0] + playerViewAxis[2] * (ang * idMath::Sin(spin)) - playerViewAxis[1] * (ang * idMath::Cos(spin));
+		//dir += dirOffset;
+
+		//RAVEN END
+		dir.Normalize();
+
+		if (projectileEnt) {
+			common->Printf("Inside projectileEnt IF\n");
+			ent = projectileEnt;
+			ent->Show();
+			ent->Unbind();
+			projectileEnt = NULL;
+		}
+		else {
+			dict.SetInt("instance", player->GetInstance());
+			gameLocal.SpawnEntityDef(dict, &ent, false);
+		}
+		//idDict& dict = 0;
+		if (!ent) {
+			gameLocal.Error("Error");
+		}
+		//Create Projectile
+		assert(ent->IsType(idProjectile::GetClassType()));
+		common->Printf("Before Create Projectile\n");
+		proj = static_cast<idProjectile*>(ent);
+		common->Printf("Before Create Projectile1\n");
+		proj->Create(player, chestPost, dir, NULL, player->extraProjPassEntity);
+		common->Printf("After CP\n");
+
+		projBounds = proj->GetPhysics()->GetBounds().Rotate(proj->GetPhysics()->GetAxis());
+
+		idVec3  start;
+		float   distance;
+		trace_t	tr;
+
+		if ((ownerBounds - projBounds).RayIntersection(chestPost, playerViewAxis[0], distance)) {
+			start = chestPost + distance * playerViewAxis[0];
+		}
+		else {
+			start = ownerBounds.GetCenter();
+		}
+
+		gameLocal.Translation(player, tr, start, chestPost, proj->GetPhysics()->GetClipModel(), proj->GetPhysics()->GetClipModel()->GetAxis(), MASK_SHOT_RENDERMODEL, player);
+		// RAVEN END
+		chestPost = tr.endpos;
+
+		proj->Launch(chestPost, dir, pushval, 0, 1.0f);
+		player->AddProjectilesFired(1);
+
+		common->Printf("End");
+
+	}
+
+}
+
+
+void Cmd_thermal_f(const idCmdArgs& args) {
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	idInventory* inventory;
+	//idProjectile* proj;
+	const idDict* thermal = gameLocal.FindEntityDefDict("item_thermal");
+
+
+	if (player->FindInventoryItem("str_107441")) {
+		common->Printf("In inventory searching");
+		player->IsZoomed();
+		player->weapon->GetZoomGui();
+		//thermal.Ge
+		//wsfl.zoom = player->IsZoomed();
+		
+	}
+
+
+}
 
 void Cmd_BuyItem_f( const idCmdArgs& args ) {
 	idPlayer* player = gameLocal.GetLocalPlayer();
@@ -2946,7 +3162,6 @@ void Cmd_BuyItem_f( const idCmdArgs& args ) {
 		common->Printf( "ERROR: Cmd_BuyItem_f() failed, since GetLocalPlayer() was NULL.\n", player );
 		return;
 	}
-
 	player->GenerateImpulseForBuyAttempt( args.Argv(1) );
 }
 // RITUAL END
@@ -3242,6 +3457,9 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "buyMenu",				Cmd_ToggleBuyMenu_f,		CMD_FL_GAME,				"Toggle buy menu (if in a buy zone and the game type supports it)" );
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
 	cmdSystem->AddCommand("locate", Cmd_locate_f, CMD_FL_GAME, "Locate");
+	cmdSystem->AddCommand("grenadeThrow", Cmd_grenadeThrow_f, CMD_FL_GAME, "Threw Grenade");
+	cmdSystem->AddCommand("smokeThrow", Cmd_smokeThrow_f, CMD_FL_GAME, "Threw Smoke");
+	cmdSystem->AddCommand("thermalZoom", Cmd_thermal_f, CMD_FL_GAME, "Zoomed in");
 	// RITUAL END
 
 }

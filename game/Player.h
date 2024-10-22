@@ -783,6 +783,7 @@ public:
 	idUserInterface*		GetCursorGUI( void );
 
 	bool					CanFire( void ) const;
+	bool					CanThrow(void) const;
 
 	bool					AllowedVoiceDest( int from );
 
@@ -851,6 +852,7 @@ private:
 	bool					objectivesEnabled;
 // jshepard: false when player is looking at an npc or gui
 	bool					flagCanFire;
+	//bool					flagCanThrow;
 // RAVEN END
 
 	bool					flashlightOn;
@@ -1091,6 +1093,7 @@ private:
 	void					Event_EnableTarget			( void );
 	void					Event_DisableTarget			( void );
 	virtual void			Event_DamageOverTimeEffect	( int endTime, int interval, const char *damageDefName );
+	//void					Event_Throw					( idPlayer* owner );
 	
 	// RAVEN BEGIN
 	// twhitaker: added Event_ApplyImpulse
@@ -1326,6 +1329,12 @@ ID_INLINE int idPlayer::GetArena( void ) const {
 ID_INLINE bool idPlayer::CanFire( void ) const {
 	return flagCanFire;
 }
+
+//ID_INLINE bool idPlayer::CanThrow(void) const {
+//	return flagCanThrow;
+//}
+
+
 
 #endif /* !__GAME_PLAYER_H__ */
 
