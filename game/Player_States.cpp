@@ -740,6 +740,7 @@ stateResult_t idPlayer::State_Legs_Crouch_Forward ( const stateParms_t& parms ) 
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			PlayCycle( ANIMCHANNEL_LEGS, "crouch_walk", parms.blendFrames );
+
 			return SRESULT_STAGE ( STAGE_WAIT );
 		
 		case STAGE_WAIT:

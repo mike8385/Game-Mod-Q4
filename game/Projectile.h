@@ -67,7 +67,7 @@ public :
 	
 protected:
 	void					SpawnImpactEntities(const trace_t& collision, const idVec3 projectileDirection);
-	void					SpawnImpactEntitiesTwo(const idVec3& origin, const idVec3 velocity, idVec3 direction);
+
 
 	idEntityPtr<idEntity>	owner;
 
@@ -99,6 +99,7 @@ protected:
 	rvSphericalInterpolate	rotation;
 
 	rvClientEffectPtr		flyEffect;
+	rvClientEffectPtr		flyEffect2;
 	float					flyEffectAttenuateSpeed;
 
 	int						bounceCount;

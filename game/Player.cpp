@@ -5293,6 +5293,7 @@ idDict *idPlayer::FindInventoryItem( const char *name ) {
 		const char *iname = inventory.items[i]->GetString( "inv_name" );
 		if ( iname && *iname ) {
 			if ( idStr::Icmp( name, iname ) == 0 ) {
+				common->Printf(iname);
 				return inventory.items[i];
 			}
 		}

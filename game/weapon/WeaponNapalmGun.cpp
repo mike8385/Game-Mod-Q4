@@ -387,6 +387,8 @@ WeaponNapalmGun::State_Fire
 ================
 */
 stateResult_t WeaponNapalmGun::State_Fire( const stateParms_t& parms ) {
+
+	jointHandle_t barrelJointView = viewAnimator->GetJointHandle(spawnArgs.GetString("joint_view_barrel", "barrel"));
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -397,6 +399,7 @@ stateResult_t WeaponNapalmGun::State_Fire( const stateParms_t& parms ) {
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 				Attack ( true, 1, spread, 0, 1.0f );
 				PlayAnim ( ANIMCHANNEL_ALL, "idle", parms.blendFrames );
+				PlayEffect("fx_fly", barrelJointView,false);
 				//fireHeld = true;
 			} else {
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
@@ -441,3 +444,4 @@ stateResult_t WeaponNapalmGun::Frame_ResetCylinder( const stateParms_t& parms) {
 void WeaponNapalmGun::SpectatorCycle( void ) {
 	cylinderState = CYLINDER_RESET_POSITION;
 }
+
