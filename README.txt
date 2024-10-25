@@ -14,9 +14,9 @@ Weapons to Metal Gear Solid
   -> Ak-47
   -> Flamethrower
   -> Mk.46 MOD1
-	-> M61 Vulcan
-	-> SVD
-	-> Stinger
+  -> M61 Vulcan
+  -> SVD
+  -> Stinger
   -> Grenade Launcher
   -> Throwable Grenade
   -> Throwable Thermite Grenade
