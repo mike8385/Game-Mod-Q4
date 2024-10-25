@@ -3039,12 +3039,12 @@ void Cmd_grenadeThrow_f(const idCmdArgs& args) {
 
 }
 
-void Cmd_smokeThrow_f(const idCmdArgs& args) {
+void Cmd_thermiteThrow_f(const idCmdArgs& args) {
 	common->Printf("Tring to throw grenade");
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	idInventory* inventory;
 	idProjectile* proj;
-	const idDict* grenade = gameLocal.FindEntityDefDict("projectile_grenade");
+	const idDict* grenade = gameLocal.FindEntityDefDict("projectile_napalm");
 	idEntityPtr<idEntity> projectileEnt = NULL;
 	idPhysics_Player physicsObj;
 	idMat3 playerViewAxis = player->firstPersonViewAxis;
@@ -3058,7 +3058,7 @@ void Cmd_smokeThrow_f(const idCmdArgs& args) {
 	dict.Init();
 	dict.Copy(*grenade);
 
-	const char* weap = player->spawnArgs.GetString(va("def_weapon4"));
+	const char* weap = player->spawnArgs.GetString(va("def_weapon10"));
 	common->Printf("\n%s \n", weap);
 
 	if (!player)return;
@@ -3458,7 +3458,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
 	cmdSystem->AddCommand("locate", Cmd_locate_f, CMD_FL_GAME, "Locate");
 	cmdSystem->AddCommand("grenadeThrow", Cmd_grenadeThrow_f, CMD_FL_GAME, "Threw Grenade");
-	cmdSystem->AddCommand("smokeThrow", Cmd_smokeThrow_f, CMD_FL_GAME, "Threw Smoke");
+	cmdSystem->AddCommand("thermiteThrow", Cmd_thermiteThrow_f, CMD_FL_GAME, "Threw Smoke");
 	cmdSystem->AddCommand("thermalZoom", Cmd_thermal_f, CMD_FL_GAME, "Zoomed in");
 	// RITUAL END
 
